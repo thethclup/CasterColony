@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@theme {
+  --color-arcane-dark: #020617;
+  --color-arcane-panel: rgba(49, 46, 129, 0.4);
+  --color-arcane-surface: rgba(15, 23, 42, 0.6);
+  
+  --color-mana: #22d3ee;
+  --color-crystal: #c084fc;
+  --color-rune: #34d399;
+  --color-essence: #fcd34d;
+
+  --animate-float: float 4s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 4px rgba(0, 229, 255, 0.5)); }
+  50% { opacity: 0.7; filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.8)); }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
