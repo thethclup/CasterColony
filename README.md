@@ -1,20 +1,38 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Caster Colony
 
-# Run and deploy your AI Studio app
+Caster Colony is a strategic, Web3-enabled, mobile-first colony-builder idle game. Establish a magical settlement of casters, orchestrate arcane architectures, and etch your colony's legacy permanently on the Base Mainnet!
 
-This contains everything you need to run your app locally.
+## Features
+- **Magical Colony Builder**: Tap-to-build satisfying idle progression system. Manage Casters, balance Mana, Crystals, and Runes!
+- **On-Chain Ascension**: Push your highest achievements to Base Mainnet using SIWE (Sign In With Ethereum) for ERC-8021 tracking.
+- **Trustless Agents Support**: Ready for ERC-8004 automated delegation.
+- **AI Agent & MCP Integration**: Includes an active Model Context Protocol (MCP) server `app/api/mcp/route.ts` to power cross-agent communication alongside `agent-card.json`.
 
-View your app in AI Studio: https://ai.studio/apps/bb4997a7-bf91-4aed-9f28-d07c1441a0ab
+## Technical Stack
+- React 19 + TypeScript + Vite
+- Tailwind CSS
+- Zustand for Idle simulation & State
+- Wagmi + Viem + WalletConnect (Base Mainnet)
+- Full-stack Express implementation (in `server.ts`)
+- Next.js Ready structures (`app/` router provided for seamless migration to Vercel Next.js deployments).
 
-## Run Locally
+## Intelligent Orchestrator Agent
+The game includes an integrated ERC-8004 compatible AI Agent.
+Visit `/.well-known/agent-card.json` after deployment to inspect the Orchestrator details. 
+- Capabilities: `colony-management`, `caster-operations`, `multi-colony-orchestration`, `mcp-command-execution`
+- API Points:
+  - Agent Info: `/api/agent`
+  - Active MCP Point: `/api/mcp`
 
-**Prerequisites:**  Node.js
+## Running Locally
 
+\`\`\`bash
+npm install
+npm run dev
+\`\`\`
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Deployment to Vercel (Next.js Conversion Option)
+The provided \`app/api\` folders and \`agent-card.json\` files make this repository completely ready to function inside a standard Next.js App Router setup on Vercel. 
+*(If running purely on Vite, the included \`server.ts\` handles these routes dynamically!)*
+
+> Note: Ensure your environment `.env` files are populated per `.env.example` in production.
