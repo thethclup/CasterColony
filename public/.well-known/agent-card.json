@@ -3,28 +3,42 @@
   "description": "Caster Colony platformunda çalışan ERC-8004 uyumlu AI Agent. Colony management, caster operations, multi-colony orchestration ve strategic casting automation yapan akıllı orchestrator.",
   "version": "1.0.0",
   "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
-  "image": "https://caster-colony.vercel.app/logo.png",
-  "wallets": {
-    "base": "0xe157F1F5e12adB38Ba013683E9Ce24efe21e5bA6"
-  },
+  "image": "https://caster-colony.vercel.app/favicon.ico",
+  "owner": "0xe157F1F5e12adB38Ba013683E9Ce24efe21e5bA6",
+  "agentWallet": "0xe157F1F5e12adB38Ba013683E9Ce24efe21e5bA6",
+  "active": true,
+  "skills": [
+    {
+      "id": "colony-management",
+      "name": "Colony Management",
+      "description": "Manage resources, build structures and strategize arcane expansion."
+    },
+    {
+      "id": "caster-operations",
+      "name": "Caster Operations",
+      "description": "Assign casters to different roles like Harvesters, Researchers, Architects."
+    },
+    {
+      "id": "strategic-casting",
+      "name": "Strategic Casting",
+      "description": "Automate spell casting and defense mechanisms against arcane storms."
+    }
+  ],
   "services": [
     {
       "name": "A2A",
-      "endpoint": "https://caster-colony.vercel.app/.well-known/agent-card.json",
       "version": "1.0.0",
-      "description": "Agent-to-Agent communication"
+      "endpoint": "https://caster-colony.vercel.app/.well-known/agent-card.json"
     },
     {
       "name": "MCP",
-      "endpoint": "https://caster-colony.vercel.app/api/mcp",
       "version": "1.0.0",
-      "description": "Model Context Protocol - Active command execution"
+      "endpoint": "https://caster-colony.vercel.app/api/mcp"
     },
     {
       "name": "API",
-      "endpoint": "https://caster-colony.vercel.app/api/agent",
       "version": "1.0.0",
-      "description": "Main agent control API"
+      "endpoint": "https://caster-colony.vercel.app/api/agent"
     }
   ],
   "capabilities": [
@@ -37,6 +51,13 @@
     "mcp-command-execution"
   ],
   "supportedChains": ["eip155:8453"],
-  "active": true,
+  "x402Support": false,
+  "registrations": [
+    {
+      "agentId": null,
+      "agentRegistry": "eip155:8453:0x8004A169FB4a3325136EB29fA0ceB6D2e539a432"
+    }
+  ],
+  "supportedTrust": ["reputation"],
   "status": "online"
 }

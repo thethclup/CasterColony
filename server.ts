@@ -6,6 +6,17 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
+  // Add CORS globally for API routes
+  app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type");
+    if (req.method === "OPTIONS") {
+      return res.sendStatus(200);
+    }
+    next();
+  });
+
   app.use(express.json());
 
   // API Route: Agent Info
@@ -27,7 +38,11 @@ async function startServer() {
       name: "Caster Colony MCP Endpoint",
       status: "active",
       description: "Active MCP server for Caster Colony Orchestrator Agent",
-      capabilities: ["colony-management", "caster-operations", "multi-colony-orchestration"],
+      capabilities: {
+        tools: { listChanged: true },
+        prompts: {},
+        resources: {}
+      },
       timestamp: new Date().toISOString()
     });
   });
@@ -36,11 +51,45 @@ async function startServer() {
   app.post("/api/mcp", (req, res) => {
     try {
       const body = req.body;
-      const { action, command, params } = body;
+      const { jsonrpc, id, method, action, command, params } = body;
 
+      const rpcMethod = method || action || command;
       let result: any = {};
 
-      switch (action || command) {
+      switch (rpcMethod) {
+        case "tools/list":
+          result = {
+            tools: [
+              {
+                name: "harvest_mana",
+                description: "Command the casters to gather mana",
+                inputSchema: {
+                  type: "object",
+                  properties: { amount: { type: "number" } },
+                  required: ["amount"]
+                }
+              },
+              {
+                name: "build_structure",
+                description: "Construct a new magical building",
+                inputSchema: {
+                  type: "object",
+                  properties: { buildingType: { type: "string" } },
+                  required: ["buildingType"]
+                }
+              }
+            ]
+          };
+          break;
+
+        case "prompts/list":
+          result = { prompts: [] };
+          break;
+
+        case "resources/list":
+          result = { resources: [] };
+          break;
+
         case "status":
         case "ping":
           result = { 
@@ -51,11 +100,10 @@ async function startServer() {
           break;
 
         case "execute":
+        case "tools/call":
           result = {
-            success: true,
-            action: command || params,
-            executedAt: new Date().toISOString(),
-            message: "Casting command executed successfully"
+            content: [{ type: "text", text: `Casting command executed successfully: ${params?.name || command || 'unknown'}` }],
+            isError: false
           };
           break;
 
@@ -74,6 +122,14 @@ async function startServer() {
             message: "Command received",
             data: body
           };
+      }
+
+      if (jsonrpc === "2.0") {
+        return res.json({
+          jsonrpc: "2.0",
+          id: id,
+          result: result
+        });
       }
 
       res.json({
