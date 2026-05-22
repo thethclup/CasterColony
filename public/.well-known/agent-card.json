@@ -1,6 +1,6 @@
 {
   "name": "Caster Colony Orchestrator",
-  "description": "Caster Colony platformunda çalışan ERC-8004 uyumlu AI Agent. Colony management, caster operations, multi-colony orchestration ve strategic casting automation yapan akıllı orchestrator.",
+  "description": "High-performance AI Agent specialized in arcane mechanics, real-time automation, multi-colony management, strategic optimization and ecosystem coordination on Base.",
   "version": "1.0.0",
   "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
   "image": "https://caster-colony.vercel.app/favicon.ico",
@@ -58,6 +58,5 @@
       "agentRegistry": "eip155:8453:0x8004A169FB4a3325136EB29fA0ceB6D2e539a432"
     }
   ],
-  "supportedTrust": ["reputation"],
-  "status": "online"
+  "supportedTrust": ["reputation"]
 }

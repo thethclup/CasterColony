@@ -1,13 +1,22 @@
 {
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/.well-known/(.*)", "destination": "/.well-known/$1" },
+    {
+      "source": "/(.*)",
+      "has": [
+        { "type": "header", "key": "accept", "value": "(?!(text/html|\\*/\\*)).*" }
+      ],
+      "destination": "/$1"
+    },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
     {
       "source": "/.well-known/agent-card.json",
       "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" }
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Content-Type", "value": "application/json" }
       ]
     },
     {
