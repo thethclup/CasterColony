@@ -61,22 +61,29 @@ async function startServer() {
           result = {
             tools: [
               {
-                name: "harvest_mana",
-                description: "Command the casters to gather mana",
-                inputSchema: {
-                  type: "object",
-                  properties: { amount: { type: "number" } },
-                  required: ["amount"]
-                }
+                name: "get_race_status",
+                description: "Get the current status of the active race",
+                inputSchema: { type: "object", properties: { raceId: { type: "string" } }, required: ["raceId"] }
               },
               {
-                name: "build_structure",
-                description: "Construct a new magical building",
-                inputSchema: {
-                  type: "object",
-                  properties: { buildingType: { type: "string" } },
-                  required: ["buildingType"]
-                }
+                name: "start_race",
+                description: "Start a new race on a specific track",
+                inputSchema: { type: "object", properties: { trackId: { type: "string" } }, required: ["trackId"] }
+              },
+              {
+                name: "get_leaderboard",
+                description: "Retrieve the racing leaderboard",
+                inputSchema: { type: "object", properties: {}, required: [] }
+              },
+              {
+                name: "optimize_speed",
+                description: "Analyze and optimize speed parameters",
+                inputSchema: { type: "object", properties: { parameters: { type: "object" } }, required: ["parameters"] }
+              },
+              {
+                name: "get_track_info",
+                description: "Get detailed information about a track",
+                inputSchema: { type: "object", properties: { trackId: { type: "string" } }, required: ["trackId"] }
               }
             ]
           };
