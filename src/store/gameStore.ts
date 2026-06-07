@@ -4,7 +4,9 @@ import { persist } from 'zustand/middleware';
 export interface Resources {
   mana: number;
   crystals: number;
-  runes: number;
+  moonHerbs: number;
+  starWood: number;
+  aetherOre: number;
   essence: number;
 }
 
@@ -17,7 +19,7 @@ export interface CasterStats {
   defenders: number;
 }
 
-export type BuildingType = 'manaNode' | 'crystalMine' | 'runeLibrary' | 'arcaneTower';
+export type BuildingType = 'manaNode' | 'crystalMine' | 'herbGarden' | 'woodMill' | 'aetherForge';
 
 export interface PlacedBuilding {
   id: string;
@@ -48,7 +50,9 @@ export interface GameState {
 export const PRODUCTION_RATES = {
   mana: { base: 1, perHarvester: 0.5, perManaNode: 2 },
   crystals: { base: 0.1, perHarvester: 0.1, perCrystalMine: 0.5 },
-  runes: { base: 0, perResearcher: 0.2, perRuneLibrary: 0.5 },
+  moonHerbs: { base: 0, perHarvester: 0.2, perHerbGarden: 0.5 },
+  starWood: { base: 0, perArchitect: 0.2, perWoodMill: 0.5 },
+  aetherOre: { base: 0, perEnchanter: 0.1, perAetherForge: 0.3 },
   essence: { base: 0, perEnchanter: 0.05 },
 };
 
@@ -58,7 +62,9 @@ export const useGameStore = create<GameState>()(
       resources: {
         mana: 0,
         crystals: 0,
-        runes: 0,
+        moonHerbs: 0,
+        starWood: 0,
+        aetherOre: 0,
         essence: 0,
       },
       casters: {
@@ -120,18 +126,24 @@ export const useGameStore = create<GameState>()(
           
           const manaNodes = buildings.filter(b => b.type === 'manaNode').length;
           const mines = buildings.filter(b => b.type === 'crystalMine').length;
-          const libraries = buildings.filter(b => b.type === 'runeLibrary').length;
+          const gardens = buildings.filter(b => b.type === 'herbGarden').length;
+          const mills = buildings.filter(b => b.type === 'woodMill').length;
+          const forges = buildings.filter(b => b.type === 'aetherForge').length;
 
           const manaGen = (PRODUCTION_RATES.mana.base + (casters.harvesters * PRODUCTION_RATES.mana.perHarvester) + (manaNodes * PRODUCTION_RATES.mana.perManaNode)) * effectiveDelta;
           const crystalGen = (PRODUCTION_RATES.crystals.base + (casters.harvesters * PRODUCTION_RATES.crystals.perHarvester) + (mines * PRODUCTION_RATES.crystals.perCrystalMine)) * effectiveDelta;
-          const runeGen = (PRODUCTION_RATES.runes.base + (casters.researchers * PRODUCTION_RATES.runes.perResearcher) + (libraries * PRODUCTION_RATES.runes.perRuneLibrary)) * effectiveDelta;
+          const herbGen = (PRODUCTION_RATES.moonHerbs.base + (casters.harvesters * PRODUCTION_RATES.moonHerbs.perHarvester) + (gardens * PRODUCTION_RATES.moonHerbs.perHerbGarden)) * effectiveDelta;
+          const woodGen = (PRODUCTION_RATES.starWood.base + (casters.architects * PRODUCTION_RATES.starWood.perArchitect) + (mills * PRODUCTION_RATES.starWood.perWoodMill)) * effectiveDelta;
+          const oreGen = (PRODUCTION_RATES.aetherOre.base + (casters.enchanters * PRODUCTION_RATES.aetherOre.perEnchanter) + (forges * PRODUCTION_RATES.aetherOre.perAetherForge)) * effectiveDelta;
           const essenceGen = (PRODUCTION_RATES.essence.base + (casters.enchanters * PRODUCTION_RATES.essence.perEnchanter)) * effectiveDelta;
 
           // Simple score calculation based on total resources collected history (here simplified to current reserves + buildings)
           const newScore = Math.floor(
             state.resources.mana * 0.1 + 
             state.resources.crystals * 2 + 
-            state.resources.runes * 10 + 
+            state.resources.moonHerbs * 5 + 
+            state.resources.starWood * 5 + 
+            state.resources.aetherOre * 10 + 
             state.resources.essence * 100 + 
             state.buildings.length * 50
           );
@@ -142,7 +154,9 @@ export const useGameStore = create<GameState>()(
             resources: {
               mana: state.resources.mana + manaGen,
               crystals: state.resources.crystals + crystalGen,
-              runes: state.resources.runes + runeGen,
+              moonHerbs: state.resources.moonHerbs + herbGen,
+              starWood: state.resources.starWood + woodGen,
+              aetherOre: state.resources.aetherOre + oreGen,
               essence: state.resources.essence + essenceGen,
             }
           };
@@ -153,7 +167,7 @@ export const useGameStore = create<GameState>()(
           // Ascension logic (prestige)
           const prestigeGain = Math.floor(state.score / 1000);
           return {
-            resources: { mana: 0, crystals: 0, runes: 0, essence: prestigeGain },
+            resources: { mana: 0, crystals: 0, moonHerbs: 0, starWood: 0, aetherOre: 0, essence: prestigeGain },
             casters: { unassigned: 3 + prestigeGain, researchers: 0, harvesters: 0, architects: 0, enchanters: 0, defenders: 0 },
             buildings: [],
             score: 0,

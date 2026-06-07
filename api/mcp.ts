@@ -11,6 +11,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).end();
   }
 
+  // Handle HEAD (often used by endpoint testers to check existence)
+  if (req.method === 'HEAD') {
+    return res.status(200).end();
+  }
+
   // MCP requires POST for tools and interactions, and may answer GET for info
   if (req.method === 'GET') {
     return res.status(200).json({

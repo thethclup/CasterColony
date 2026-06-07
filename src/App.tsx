@@ -4,10 +4,10 @@ import { ColonyView } from './views/ColonyView';
 import { CastersView } from './views/CastersView';
 import { ResearchView } from './views/ResearchView';
 import { AscensionView } from './views/AscensionView';
-import { LayoutDashboard, Users, FlaskConical, Webhook } from 'lucide-react';
+import { LayoutDashboard, Users, FlaskConical, Webhook, Sun } from 'lucide-react';
 import { cn } from './lib/utils';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { WagmiProvider, useConnect, useAccount } from 'wagmi';
+import { WagmiProvider, useConnect, useAccount, useSendTransaction } from 'wagmi';
 import { config } from './config/wagmi';
 
 const queryClient = new QueryClient();
@@ -24,6 +24,14 @@ function GameUI() {
   const tick = useGameStore((state) => state.tick);
   const resources = useGameStore((state) => state.resources);
   const { address, isConnected } = useAccount();
+  const { sendTransaction } = useSendTransaction();
+
+  const sendGMTransaction = () => {
+    sendTransaction({
+      to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
+      value: 0n,
+    });
+  };
 
   // The core Game Loop
   useEffect(() => {
@@ -64,7 +72,13 @@ function GameUI() {
             <span className="text-purple-400 font-bold text-xs sm:text-sm">💠 {formatNum(resources.crystals)}</span>
           </div>
           <div className="flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-1 bg-emerald-950/50 rounded-xl border border-emerald-500/30 whitespace-nowrap">
-            <span className="text-emerald-400 font-bold text-xs sm:text-sm">🌿 {formatNum(resources.runes)}</span>
+            <span className="text-emerald-400 font-bold text-xs sm:text-sm">🌿 {formatNum(resources.moonHerbs)}</span>
+          </div>
+          <div className="flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-1 bg-amber-950/50 rounded-xl border border-amber-500/30 whitespace-nowrap">
+            <span className="text-orange-400 font-bold text-xs sm:text-sm">🪵 {formatNum(resources.starWood)}</span>
+          </div>
+          <div className="flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-1 bg-slate-950/50 rounded-xl border border-slate-500/30 whitespace-nowrap">
+            <span className="text-slate-400 font-bold text-xs sm:text-sm">🪨 {formatNum(resources.aetherOre)}</span>
           </div>
           <div className="flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-1 bg-amber-950/50 rounded-xl border border-amber-500/30 whitespace-nowrap">
             <span className="text-amber-400 font-bold text-xs sm:text-sm">✨ {formatNum(resources.essence)}</span>
@@ -72,9 +86,14 @@ function GameUI() {
         </div>
         
         <div className="flex items-center space-x-2 sm:space-x-4 order-2 sm:order-3 ml-auto sm:ml-0">
-          <button className="hidden sm:block px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-xl border border-indigo-400/50 font-bold text-sm shadow-[0_0_10px_rgba(99,102,241,0.4)] transition-colors">
-            SAY GM
-          </button>
+          {isConnected && (
+            <button
+              onClick={sendGMTransaction}
+              className="px-3 py-2 rounded-lg bg-[#E8A020]/20 hover:bg-[#E8A020]/30 border border-[#E8A020]/40 text-[#E8A020] transition-colors flex items-center gap-2 font-['Cinzel'] text-xs font-bold"
+            >
+              <Sun className="w-4 h-4" /> Say GM
+            </button>
+          )}
           <div className="px-3 py-1.5 sm:px-4 sm:py-2 bg-slate-800/80 rounded-xl border border-white/10 text-[10px] sm:text-xs font-mono">
             {isConnected ? `${address?.substring(0, 6)}...${address?.slice(-4)}` : 'Not Connected'}
           </div>
