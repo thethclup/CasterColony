@@ -7,7 +7,8 @@ import { AscensionView } from './views/AscensionView';
 import { LayoutDashboard, Users, FlaskConical, Webhook, Sun } from 'lucide-react';
 import { cn } from './lib/utils';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { WagmiProvider, useConnect, useAccount, useSendTransaction } from 'wagmi';
+import { WagmiProvider, useConnect, useAccount, useSendTransaction, useSendCalls } from 'wagmi';
+import { useWalletCapabilities } from './hooks/useWalletCapabilities';
 import { config } from './config/wagmi';
 
 const queryClient = new QueryClient();
@@ -25,12 +26,37 @@ function GameUI() {
   const resources = useGameStore((state) => state.resources);
   const { address, isConnected } = useAccount();
   const { sendTransaction } = useSendTransaction();
+  const { sendCalls } = useSendCalls();
+  const { supportsBatching } = useWalletCapabilities();
 
   const sendGMTransaction = () => {
-    sendTransaction({
-      to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
-      value: 0n,
-    });
+    // We include these placeholders as requested:
+    // [ATTRIBUTION_CODE]
+    // [BUILDER_CODE]
+    
+    // In actual implementation, suffix is constructed from Builder Code and padding.
+    // 0x07626173656170700080218021802180218021802180218021 is "baseapp" + 8021 padding example from docs.
+    const dataSuffixValue = "0x07626173656170700080218021802180218021802180218021";
+
+    if (supportsBatching) {
+      sendCalls({
+        calls: [
+          { to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3', value: 0n, data: '0x' }
+        ],
+        capabilities: {
+          dataSuffix: {
+            value: dataSuffixValue,
+            optional: true
+          }
+        }
+      });
+    } else {
+      sendTransaction({
+        to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
+        value: 0n,
+        data: dataSuffixValue as `0x${string}`,
+      });
+    }
   };
 
   // The core Game Loop

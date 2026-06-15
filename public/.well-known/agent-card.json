@@ -24,6 +24,28 @@
       "description": "Automate spell casting and defense mechanisms against arcane storms."
     }
   ],
+  "tools": [
+    {
+      "name": "get_race_status",
+      "description": "Get the current status of the active race"
+    },
+    {
+      "name": "start_race",
+      "description": "Start a new race on a specific track"
+    },
+    {
+      "name": "get_leaderboard",
+      "description": "Retrieve the racing leaderboard"
+    },
+    {
+      "name": "optimize_speed",
+      "description": "Analyze and optimize speed parameters"
+    },
+    {
+      "name": "get_track_info",
+      "description": "Get detailed information about a track"
+    }
+  ],
   "services": [
     {
       "name": "A2A",
